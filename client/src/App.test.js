@@ -1,4 +1,11 @@
-// https://enzymejs.github.io/enzyme/
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-configure({ adapter: new Adapter() });
+import React from 'react';
+import { shallow, mount } from 'enzyme';
+import App from './App';
+
+//https://jestjs.io/docs/en/expect
+//shallow: https://enzymejs.github.io/enzyme/docs/api/shallow.html
+//mount: https://enzymejs.github.io/enzyme/docs/api/mount.html
+
+it('App deeply renders as a smoke test', () => {
+  mount(<App />);
+});
