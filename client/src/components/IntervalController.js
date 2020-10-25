@@ -5,9 +5,9 @@ function IntervalController(props){
     return <section>
         <h2 id={`${type}-label`}>{props.type}</h2>
         <div>
-            <button id={`${type}-decrement`}>&#9660;</button>
+            <button id={`${type}-decrement`} onClick={props.intervalController}>&#9660;</button>
             <p id={`${type}-length`}>{props.length}</p>
-            <button id={`${type}-increment`}>&#9650;</button>
+            <button id={`${type}-increment`} onClick={props.intervalController}>&#9650;</button>
         </div>
     </section>;
 }
