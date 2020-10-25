@@ -2,5 +2,18 @@ section div{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    margin-bottom: 20px;
+}
+
+button {
+    font-size: 2rem;
+    width: 54px;
+}
+
+#start_stop, #reset {
+    padding: 5px;
+    line-height: 2rem;
+}
+
+footer {
+    margin-top: 20px;
 }
