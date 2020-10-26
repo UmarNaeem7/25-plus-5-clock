@@ -15,34 +15,40 @@ class App extends React.Component {
       isSession: true,
     }
     this.intervalTypes = Object.keys(this.state.intervals);
-    this.intervalController = this.intervalController.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
-  intervalController(event){
+  handleChange(event){
     const buttonElementId = event.target.id;
     const indexOfIdDash = buttonElementId.indexOf('-');
     const intervalType = buttonElementId.substring(0, indexOfIdDash);
-    const intervals = {...this.state.intervals};
-    if(intervals[intervalType] === 1 || intervals[intervalType] === 60){
-      return;
-    }
-    
     const intervalDirection = buttonElementId.substring(indexOfIdDash + 1);
+    const intervals = {...this.state.intervals};
+    
     if(intervalDirection === 'increment'){
       intervals[intervalType]++;
     } else {
       intervals[intervalType]--;
     }
-    if(intervals[intervalType] > 0 && intervals[intervalType] < 61){
+    if(intervals[intervalType] >= 1 && intervals[intervalType] <= 60){
+      this.setState({intervals});
     }
-    this.setState({intervals});
+  }
+
+  //TODO: When I click the element with the id of "reset", any running timer should be stopped and the element with id="time-left" should reset to its default state.
+  reset(){
+    this.setState({intervals: {
+      break: 5,
+      session: 25
+    }});
   }
   
   render(){
     return <div>
       <h1>25 + 5 Clock</h1>
-      {this.intervalTypes.map(type => <IntervalController type={type} length={this.state.intervals[type]} intervalController={this.intervalController}/>)}
-      <Timer interval={this.state.isSession ? this.intervalTypes[1]: this.intervalTypes[0]} />
+      {this.intervalTypes.map(type => <IntervalController key={type} type={type} length={this.state.intervals[type]} handleChange={this.handleChange}/>)}
+      <Timer interval={this.state.isSession ? this.intervalTypes[1]: this.intervalTypes[0]} reset={this.reset}/>
       <Footer />
     </div>;
   }
