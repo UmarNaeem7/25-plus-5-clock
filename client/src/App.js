@@ -21,9 +21,7 @@ class App extends React.Component {
 
   handleChange(event){
     const buttonElementId = event.target.id;
-    const indexOfIdDash = buttonElementId.indexOf('-');
-    const intervalType = buttonElementId.substring(0, indexOfIdDash);
-    const intervalDirection = buttonElementId.substring(indexOfIdDash + 1);
+    const [intervalType, intervalDirection] = buttonElementId.split('-');
     const intervals = {...this.state.intervals};
     
     if(intervalDirection === 'increment'){
