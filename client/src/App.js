@@ -46,7 +46,7 @@ class App extends React.Component {
   
   //TODO: Need to toggle and reset between session and break, and stop timer from the point the time was paused
   countDown(){
-    let minutes = this.state.intervals.session;
+    let minutes = this.state.isSession ? this.state.intervals.session : this.state.intervals.break;
     this.setState({time: `${this.leftPad(minutes)}:00`});
     let seconds = 59;
     minutes--;
@@ -60,6 +60,7 @@ class App extends React.Component {
           minutes--;
         } else {
           clearInterval(interval);
+          this.setState({isSession: !this.state.isSession})
         }
       }
     }, 1000);
