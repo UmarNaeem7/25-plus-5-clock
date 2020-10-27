@@ -72,7 +72,9 @@ class App extends React.Component {
       intervals: {
         break: 5,
         session: 25
-      }
+      },
+      isSession: true,
+      time: '25:00'
     });
   }
   
