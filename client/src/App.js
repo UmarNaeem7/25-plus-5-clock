@@ -19,7 +19,6 @@ class App extends React.Component {
     }
     this.intervalTypes = Object.keys(this.state.intervals);
     this.handleChange = this.handleChange.bind(this);
-    this.getMinutes = this.getMinutes.bind(this);
     this.countDown = this.countDown.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
