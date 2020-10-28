@@ -69,3 +69,22 @@ it('renders an IntervalController component with a valid interval break length',
   expect(p.prop('id')).toEqual(`${breakType}-length`);
   expect(p.text()).toEqual(`${breakLength}`);
 });
+
+it('renders an IntervalController component with a valid interval session length', () => {
+  const sessionType = INTERVAL_TYPES[1];
+  const sessionLength = INITIAL_STATE.intervals[sessionType];
+  const intervalController = shallow(<IntervalController type={sessionType} length={sessionLength} />);
+  
+  const h2 = intervalController.find('h2');
+  expect(h2.prop('id')).toEqual(`${sessionType}-label`);
+  expect(h2.text()).toEqual(sessionType);
+  
+  const buttons = intervalController.find('button');
+  buttons.forEach((button, i) => {
+    expect(button.prop('id')).toEqual(`${sessionType}-${BUTTON_ID_DIRECTIONS[i]}`);
+  });
+
+  const p = intervalController.find('p');
+  expect(p.prop('id')).toEqual(`${sessionType}-length`);
+  expect(p.text()).toEqual(`${sessionLength}`);
+});
