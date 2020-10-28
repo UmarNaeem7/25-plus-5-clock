@@ -13,11 +13,15 @@ class App extends React.Component {
         session: 25
       },
       isSession: true,
-      time: '25:00'
+      isPaused: true,
+      remainingTime: null,
+      time: '25:00',
     }
     this.intervalTypes = Object.keys(this.state.intervals);
     this.handleChange = this.handleChange.bind(this);
+    this.getMinutes = this.getMinutes.bind(this);
     this.countDown = this.countDown.bind(this);
+    this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
   }
 
@@ -43,15 +47,38 @@ class App extends React.Component {
       return '0' + value;
     }
   }
+
+  getMinutes(){
+    if(this.state.remainingTime !== null){
+      return parseInt(this.state.remainingTime[0]);
+    } else if(this.state.isSession){
+      return this.state.intervals.session
+    } else {
+      return this.state.intervals.break;
+    }
+  }
+
+  getSeconds(){
+    if(this.state.remainingTime !== null){
+      return parseInt(this.state.remainingTime[1]);
+    } else {
+      return 0;
+    }
+  }
   
-  //TODO: Need to toggle and reset between session and break, and stop timer from the point the time was paused
   countDown(){
-    let minutes = this.state.isSession ? this.state.intervals.session : this.state.intervals.break;
-    this.setState({time: `${this.leftPad(minutes)}:00`});
-    let seconds = 59;
-    minutes--;
+    this.setState({isPaused: false});
+    let minutes = this.getMinutes();
+    let seconds = this.getSeconds();
+    this.setState({time: `${this.leftPad(minutes)}:${this.leftPad(seconds)}`});
+    if(this.state.remainingTime === null){
+      minutes--;
+      seconds = 59;
+    } else {
+      seconds--;
+    }
     
-    const interval = setInterval(() => {
+    this.interval = setInterval(() => {
       this.setState({time: `${this.leftPad(minutes)}:${this.leftPad(seconds)}`});
       seconds--;
       if(seconds < 0){
@@ -59,15 +86,22 @@ class App extends React.Component {
           seconds = 59;
           minutes--;
         } else {
-          clearInterval(interval);
+          clearInterval(this.interval);
           this.setState({isSession: !this.state.isSession})
         }
       }
     }, 1000);
   }
+  
+  //TODO: stop timer from the point the time was paused
+  pause(){
+    clearInterval(this.interval);
+    this.setState({isPaused: true, remainingTime: this.state.time.split(":")})
+  }
 
-  //TODO: When I click the element with the id of "reset", any running timer should be stopped and the element with id="time-left" should reset to its default state.
+  //TODO: any running timer should be stopped
   reset(){
+    clearInterval(this.interval);
     this.setState({
       intervals: {
         break: 5,
@@ -82,7 +116,7 @@ class App extends React.Component {
     return <div>
       <h1>25 + 5 Clock</h1>
       {this.intervalTypes.map(type => <IntervalController key={type} type={type} length={this.state.intervals[type]} handleChange={this.handleChange}/>)}
-      <Timer interval={this.state.isSession ? this.intervalTypes[1]: this.intervalTypes[0]} reset={this.reset} time={this.state.time} start={this.countDown}/>
+      <Timer interval={this.state.isSession ? this.intervalTypes[1]: this.intervalTypes[0]} reset={this.reset} time={this.state.time} start={this.countDown} isPaused={this.state.isPaused} pause={this.pause}/>
       <Footer />
     </div>;
   }
