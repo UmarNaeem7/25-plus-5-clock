@@ -3,7 +3,6 @@ import { shallow, mount } from 'enzyme';
 import App from './App';
 import IntervalController from './components/IntervalController.js';
 import Timer from './components/Timer.js';
-import Footer from './components/Footer.js';
 
 //https://jestjs.io/docs/en/expect
 //shallow: https://enzymejs.github.io/enzyme/docs/api/shallow.html
@@ -98,4 +97,14 @@ it('calls method handleChange() onClick with the IntervalController component de
     button.simulate('click');
   });
   expect(handleChange.mock.calls.length).toEqual(buttons.length);
+});
+
+it('renders a Timer component passing in values of an initial state with isSession and isPaused both true', () => {
+  const timer = shallow(<Timer interval={INITIAL_STATE.isSession ? INTERVAL_TYPES[1]: INTERVAL_TYPES[0]}  time={INITIAL_STATE.time} isPaused={INITIAL_STATE.isPaused} />);
+  
+  const h2 = timer.find('h2');
+  expect(h2.text()).toEqual(INTERVAL_TYPES[1]);
+  
+  const p = timer.find('p');
+  expect(p.text()).toEqual(INITIAL_STATE.time);
 });
