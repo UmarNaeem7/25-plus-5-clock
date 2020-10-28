@@ -108,3 +108,18 @@ it('renders a Timer component passing in values of an initial state with isSessi
   const p = timer.find('p');
   expect(p.text()).toEqual(INITIAL_STATE.time);
 });
+
+it('renders a Timer component with isSession is false, isPaused is true, and time is set to initial break time', () => {
+  const STATE_FALSE_SESSION = {
+    ...INITIAL_STATE,
+    isSession: false,
+    time: `${INITIAL_STATE.intervals.break}:00`
+  }
+  const timer = shallow(<Timer interval={STATE_FALSE_SESSION.isSession ? INTERVAL_TYPES[1]: INTERVAL_TYPES[0]}  time={STATE_FALSE_SESSION.time} isPaused={STATE_FALSE_SESSION.isPaused} />);
+  
+  const h2 = timer.find('h2');
+  expect(h2.text()).toEqual(INTERVAL_TYPES[0]);
+  
+  const p = timer.find('p');
+  expect(p.text()).toEqual(STATE_FALSE_SESSION.time);
+});
