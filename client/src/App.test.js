@@ -20,6 +20,7 @@ const INITIAL_STATE =  {
   time: '25:00',
 };
 const INTERVAL_TYPES = Object.keys(INITIAL_STATE.intervals);
+const BUTTON_ID_DIRECTIONS = ['decrement', 'increment'];
 
 it('App deeply renders as a smoke test', () => {
   mount(<App />);
@@ -48,4 +49,23 @@ it('renders App class child components, and initializes their props', () => {
   
   const footer = app.find('Footer');
   expect(footer.exists()).toEqual(true);
+});
+
+it('renders an IntervalController component with a valid interval break length', () => {
+  const breakType = INTERVAL_TYPES[0];
+  const breakLength = INITIAL_STATE.intervals[breakType];
+  const intervalController = shallow(<IntervalController type={breakType} length={breakLength} />);
+  
+  const h2 = intervalController.find('h2');
+  expect(h2.prop('id')).toEqual(`${breakType}-label`);
+  expect(h2.text()).toEqual(breakType);
+  
+  const buttons = intervalController.find('button');
+  buttons.forEach((button, i) => {
+    expect(button.prop('id')).toEqual(`${breakType}-${BUTTON_ID_DIRECTIONS[i]}`);
+  });
+
+  const p = intervalController.find('p');
+  expect(p.prop('id')).toEqual(`${breakType}-length`);
+  expect(p.text()).toEqual(`${breakLength}`);
 });
