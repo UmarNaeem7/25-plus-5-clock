@@ -25,6 +25,14 @@ class App extends React.Component {
     this.reset = this.reset.bind(this);
   }
 
+  leftPad(value){
+    if(value > 9){
+      return value + '';
+    } else {
+      return '0' + value;
+    }
+  }
+
   handleChange(event){
     const buttonElementId = event.target.id;
     const [intervalType, intervalDirection] = buttonElementId.split('-');
@@ -37,14 +45,9 @@ class App extends React.Component {
     }
     if(intervals[intervalType] >= 1 && intervals[intervalType] <= 60){
       this.setState({intervals});
-    }
-  }
-
-  leftPad(value){
-    if(value > 9){
-      return value + '';
-    } else {
-      return '0' + value;
+      if(intervalType === 'session'){
+        this.setState({time: `${this.leftPad(intervals[intervalType])}:00`})
+      }
     }
   }
 
@@ -93,13 +96,11 @@ class App extends React.Component {
     }, 1000);
   }
   
-  //TODO: stop timer from the point the time was paused
   pause(){
     clearInterval(this.interval);
     this.setState({isPaused: true, remainingTime: this.state.time.split(":")})
   }
 
-  //TODO: any running timer should be stopped
   reset(){
     clearInterval(this.interval);
     this.setState({
