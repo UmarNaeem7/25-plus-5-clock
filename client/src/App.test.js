@@ -88,3 +88,14 @@ it('renders an IntervalController component with a valid interval session length
   expect(p.prop('id')).toEqual(`${sessionType}-length`);
   expect(p.text()).toEqual(`${sessionLength}`);
 });
+
+it('calls method handleChange() onClick with the IntervalController component decrement and increment buttons', () => {
+  const handleChange = jest.fn();
+  const intervalController = shallow(<IntervalController handleChange={handleChange}
+  />);
+  const buttons = intervalController.find('button');
+  buttons.forEach(button => {
+    button.simulate('click');
+  });
+  expect(handleChange.mock.calls.length).toEqual(buttons.length);
+});
