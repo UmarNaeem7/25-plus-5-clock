@@ -68,6 +68,15 @@ class App extends React.Component {
       return 0;
     }
   }
+
+  controlAudio(action){
+    const audio = document.getElementById('beep');
+    if(action === 'rewind'){
+      audio.currentTime = 0;
+    } else {
+      audio[action]();
+    }
+  }
   
   countDown(){
     this.setState({isPaused: false});
@@ -90,6 +99,7 @@ class App extends React.Component {
           minutes--;
         } else {
           this.setState({isSession: !this.state.isSession})
+          this.controlAudio('play');
           minutes = this.getMinutes();
           seconds = this.getSeconds();
         }
@@ -104,6 +114,8 @@ class App extends React.Component {
 
   reset(){
     clearInterval(this.interval);
+    this.controlAudio('pause');
+    this.controlAudio('rewind');
     this.setState({
       intervals: {
         break: 5,
