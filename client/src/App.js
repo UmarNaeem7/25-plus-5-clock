@@ -89,8 +89,9 @@ class App extends React.Component {
           seconds = 59;
           minutes--;
         } else {
-          clearInterval(this.interval);
           this.setState({isSession: !this.state.isSession})
+          minutes = this.getMinutes();
+          seconds = this.getSeconds();
         }
       }
     }, 1000);
