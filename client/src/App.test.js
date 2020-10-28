@@ -90,8 +90,7 @@ it('renders an IntervalController component with a valid interval session length
 
 it('calls method handleChange() onClick with the IntervalController component decrement and increment buttons', () => {
   const handleChange = jest.fn();
-  const intervalController = shallow(<IntervalController handleChange={handleChange}
-  />);
+  const intervalController = shallow(<IntervalController handleChange={handleChange} />);
   const buttons = intervalController.find('button');
   buttons.forEach(button => {
     button.simulate('click');
@@ -99,27 +98,17 @@ it('calls method handleChange() onClick with the IntervalController component de
   expect(handleChange.mock.calls.length).toEqual(buttons.length);
 });
 
-it('renders a Timer component passing in values of an initial state with isSession and isPaused both true', () => {
-  const timer = shallow(<Timer interval={INITIAL_STATE.isSession ? INTERVAL_TYPES[1]: INTERVAL_TYPES[0]}  time={INITIAL_STATE.time} isPaused={INITIAL_STATE.isPaused} />);
+it('renders a Timer component with an h2 set to session, a p set to initial session time, and start() prop method called', () => {
+  const start = jest.fn();
+  const timer = shallow(<Timer interval={INTERVAL_TYPES[1]} time={INITIAL_STATE.time} isPaused={true} start={start}/>);
   
   const h2 = timer.find('h2');
   expect(h2.text()).toEqual(INTERVAL_TYPES[1]);
   
   const p = timer.find('p');
   expect(p.text()).toEqual(INITIAL_STATE.time);
-});
 
-it('renders a Timer component with isSession is false, isPaused is true, and time is set to initial break time', () => {
-  const STATE_FALSE_SESSION = {
-    ...INITIAL_STATE,
-    isSession: false,
-    time: `${INITIAL_STATE.intervals.break}:00`
-  }
-  const timer = shallow(<Timer interval={STATE_FALSE_SESSION.isSession ? INTERVAL_TYPES[1]: INTERVAL_TYPES[0]}  time={STATE_FALSE_SESSION.time} isPaused={STATE_FALSE_SESSION.isPaused} />);
-  
-  const h2 = timer.find('h2');
-  expect(h2.text()).toEqual(INTERVAL_TYPES[0]);
-  
-  const p = timer.find('p');
-  expect(p.text()).toEqual(STATE_FALSE_SESSION.time);
+  const startStopButton = timer.find('#start_stop');
+  startStopButton.simulate('click');
+  expect(start).toHaveBeenCalled();
 });
