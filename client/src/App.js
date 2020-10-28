@@ -14,7 +14,7 @@ class App extends React.Component {
       },
       isSession: true,
       isPaused: true,
-      remainingTime: null,
+      pausedTime: null,
       time: '25:00',
     }
     this.intervalTypes = Object.keys(this.state.intervals);
@@ -52,8 +52,8 @@ class App extends React.Component {
   }
 
   getMinutes(){
-    if(this.state.remainingTime !== null){
-      return parseInt(this.state.remainingTime[0]);
+    if(this.state.pausedTime !== null){
+      return parseInt(this.state.pausedTime[0]);
     } else if(this.state.isSession){
       return this.state.intervals.session;
     } else {
@@ -62,8 +62,8 @@ class App extends React.Component {
   }
 
   getSeconds(){
-    if(this.state.remainingTime !== null){
-      return parseInt(this.state.remainingTime[1]);
+    if(this.state.pausedTime !== null){
+      return parseInt(this.state.pausedTime[1]);
     } else {
       return 0;
     }
@@ -82,7 +82,7 @@ class App extends React.Component {
     this.setState({isPaused: false});
     let minutes = this.getMinutes();
     let seconds = this.getSeconds();
-    if(this.state.remainingTime === null){
+    if(this.state.pausedTime === null){
       this.setState({time: `${this.leftPad(minutes)}:${this.leftPad(seconds)}`});
       minutes--;
       seconds = 59;
@@ -109,7 +109,7 @@ class App extends React.Component {
   
   pause(){
     clearInterval(this.interval);
-    this.setState({isPaused: true, remainingTime: this.state.time.split(':')})
+    this.setState({isPaused: true, pausedTime: this.state.time.split(':')})
   }
 
   reset(){
@@ -123,7 +123,7 @@ class App extends React.Component {
       },
       isSession: true,
       isPaused: true,
-      remainingTime: null,
+      pausedTime: null,
       time: '25:00'
     });
   }
