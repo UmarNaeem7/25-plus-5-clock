@@ -82,7 +82,6 @@ class App extends React.Component {
     let minutes = this.getMinutes();
     let seconds = this.getSeconds();
     if(this.state.pausedTime === null){
-      this.setState({time: `${this.leftPad(minutes)}:${this.leftPad(seconds)}`});
       minutes--;
       seconds = 59;
     } else {
