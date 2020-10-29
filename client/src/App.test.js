@@ -126,3 +126,63 @@ it('renders a Timer component with isPaused is set to false and the pause() prop
   startStopButton.simulate('click');
   expect(pause).toHaveBeenCalled();
 });
+
+it('calls App class method handleChange() passing in an event with a target id of session-decrement and initial state values set', () => {
+  const app = shallow(<App />);
+  app.setState({...INITIAL_STATE});
+  const EXPECTED_DECREMENTED_TIME = '24:00';
+  const event = {
+    target: {
+      id: `${INTERVAL_TYPES[1]}-${BUTTON_ID_DIRECTIONS[0]}`
+    }
+  }
+  app.instance().handleChange(event);
+
+  const sessionIntervalController = app.find('IntervalController').at(1);
+  expect(sessionIntervalController.prop('length')).toEqual(INITIAL_STATE.intervals.session - 1);
+
+  const timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_DECREMENTED_TIME);
+});
+
+it('calls App class method handleChange() passing in an event with a target id of session-increment and initial state values set', () => {
+  const app = shallow(<App />);
+  app.setState({...INITIAL_STATE});
+  const EXPECTED_INCREMENTED_TIME = '26:00';
+  const event = {
+    target: {
+      id: `${INTERVAL_TYPES[1]}-${BUTTON_ID_DIRECTIONS[1]}`
+    }
+  }
+  app.instance().handleChange(event);
+
+  const sessionIntervalController = app.find('IntervalController').at(1);
+  expect(sessionIntervalController.prop('length')).toEqual(INITIAL_STATE.intervals.session + 1);
+
+  const timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_INCREMENTED_TIME);
+});
+
+it('calls App class method handleChange() passing in an event with a target id of session-increment with session state value set to a value < 9', () => {
+  const app = shallow(<App />);
+  const EXPECTED_INCREMENTED_TIME = '02:00';
+  const EXPECTED_INCREMENTED_LENGTH = 2;
+  app.setState({
+    intervals: {
+      session: 1
+    },
+    time: '01:00'
+  });
+  const event = {
+    target: {
+      id: `${INTERVAL_TYPES[1]}-${BUTTON_ID_DIRECTIONS[1]}`
+    }
+  }
+  app.instance().handleChange(event);
+
+  const sessionIntervalController = app.find('IntervalController').at(1);
+  expect(sessionIntervalController.prop('length')).toEqual(EXPECTED_INCREMENTED_LENGTH);
+
+  const timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_INCREMENTED_TIME);
+});
