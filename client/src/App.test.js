@@ -129,7 +129,6 @@ it('renders a Timer component with isPaused is set to false and the pause() prop
 
 it('calls App class method handleChange() passing in an event with a target id of session-decrement and initial state values set', () => {
   const app = shallow(<App />);
-  app.setState({...INITIAL_STATE});
   const EXPECTED_DECREMENTED_TIME = '24:00';
   const event = {
     target: {
@@ -147,7 +146,6 @@ it('calls App class method handleChange() passing in an event with a target id o
 
 it('calls App class method handleChange() passing in an event with a target id of session-increment and initial state values set', () => {
   const app = shallow(<App />);
-  app.setState({...INITIAL_STATE});
   const EXPECTED_INCREMENTED_TIME = '26:00';
   const event = {
     target: {
