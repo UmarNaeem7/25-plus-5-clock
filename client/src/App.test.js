@@ -88,7 +88,7 @@ it('renders an IntervalController component with a valid interval session length
   expect(p.text()).toEqual(`${sessionLength}`);
 });
 
-it('calls method handleChange() onClick with the IntervalController component decrement and increment buttons', () => {
+it('calls prop handleChange onClick with the IntervalController component decrement and increment buttons', () => {
   const handleChange = jest.fn();
   const intervalController = shallow(<IntervalController handleChange={handleChange} />);
   const buttons = intervalController.find('button');
@@ -111,4 +111,13 @@ it('renders a Timer component with an h2 set to session, a p set to initial sess
   const startStopButton = timer.find('#start_stop');
   startStopButton.simulate('click');
   expect(start).toHaveBeenCalled();
+});
+
+it('renders a Timer component with isPaused is set to false and the start_stop button is clicked', () => {
+  const pause = jest.fn();
+  const timer = shallow(<Timer isPaused={false} pause={pause}/>);
+
+  const startStopButton = timer.find('#start_stop');
+  startStopButton.simulate('click');
+  expect(pause).toHaveBeenCalled();
 });
