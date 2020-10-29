@@ -98,7 +98,7 @@ it('calls prop handleChange onClick with the IntervalController component decrem
   expect(handleChange.mock.calls.length).toEqual(buttons.length);
 });
 
-it('renders a Timer component with an h2 set to session and a p set to initial session time', () => {
+it('renders a Timer component with an h2 set to session and a p set to a valid session time', () => {
   const timer = shallow(<Timer interval={INTERVAL_TYPES[1]} time={INITIAL_STATE.time} />);
   
   const h2 = timer.find('h2');
