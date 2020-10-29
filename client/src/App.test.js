@@ -50,41 +50,41 @@ it('renders App class child components, and initializes their props', () => {
   expect(footer.exists()).toEqual(true);
 });
 
-it('renders an IntervalController component with a valid interval break length', () => {
-  const breakType = INTERVAL_TYPES[0];
-  const breakLength = INITIAL_STATE.intervals[breakType];
-  const intervalController = shallow(<IntervalController type={breakType} length={breakLength} />);
+it('renders an IntervalController component with an h2 set to break, a p set to a valid break length, and buttons with ids indicating increment and decrement', () => {
+  const breakIntervalType = INTERVAL_TYPES[0];
+  const breakLength = INITIAL_STATE.intervals[breakIntervalType];
+  const intervalController = shallow(<IntervalController type={breakIntervalType} length={breakLength} />);
   
   const h2 = intervalController.find('h2');
-  expect(h2.prop('id')).toEqual(`${breakType}-label`);
-  expect(h2.text()).toEqual(breakType);
+  expect(h2.prop('id')).toEqual(`${breakIntervalType}-label`);
+  expect(h2.text()).toEqual(breakIntervalType);
   
   const buttons = intervalController.find('button');
   buttons.forEach((button, i) => {
-    expect(button.prop('id')).toEqual(`${breakType}-${BUTTON_ID_DIRECTIONS[i]}`);
+    expect(button.prop('id')).toEqual(`${breakIntervalType}-${BUTTON_ID_DIRECTIONS[i]}`);
   });
 
   const p = intervalController.find('p');
-  expect(p.prop('id')).toEqual(`${breakType}-length`);
+  expect(p.prop('id')).toEqual(`${breakIntervalType}-length`);
   expect(p.text()).toEqual(`${breakLength}`);
 });
 
-it('renders an IntervalController component with a valid interval session length', () => {
-  const sessionType = INTERVAL_TYPES[1];
-  const sessionLength = INITIAL_STATE.intervals[sessionType];
-  const intervalController = shallow(<IntervalController type={sessionType} length={sessionLength} />);
+it('renders an IntervalController component with an h2 set to session, a p set to a valid session length, and buttons with ids indicating increment and decrement', () => {
+  const sessionIntervalType = INTERVAL_TYPES[1];
+  const sessionLength = INITIAL_STATE.intervals[sessionIntervalType];
+  const intervalController = shallow(<IntervalController type={sessionIntervalType} length={sessionLength} />);
   
   const h2 = intervalController.find('h2');
-  expect(h2.prop('id')).toEqual(`${sessionType}-label`);
-  expect(h2.text()).toEqual(sessionType);
+  expect(h2.prop('id')).toEqual(`${sessionIntervalType}-label`);
+  expect(h2.text()).toEqual(sessionIntervalType);
   
   const buttons = intervalController.find('button');
   buttons.forEach((button, i) => {
-    expect(button.prop('id')).toEqual(`${sessionType}-${BUTTON_ID_DIRECTIONS[i]}`);
+    expect(button.prop('id')).toEqual(`${sessionIntervalType}-${BUTTON_ID_DIRECTIONS[i]}`);
   });
 
   const p = intervalController.find('p');
-  expect(p.prop('id')).toEqual(`${sessionType}-length`);
+  expect(p.prop('id')).toEqual(`${sessionIntervalType}-length`);
   expect(p.text()).toEqual(`${sessionLength}`);
 });
 
@@ -98,22 +98,27 @@ it('calls prop handleChange onClick with the IntervalController component decrem
   expect(handleChange.mock.calls.length).toEqual(buttons.length);
 });
 
-it('renders a Timer component with an h2 set to session, a p set to initial session time, and start() prop method called', () => {
-  const start = jest.fn();
-  const timer = shallow(<Timer interval={INTERVAL_TYPES[1]} time={INITIAL_STATE.time} isPaused={true} start={start}/>);
+it('renders a Timer component with an h2 set to session and a p set to initial session time', () => {
+  const timer = shallow(<Timer interval={INTERVAL_TYPES[1]} time={INITIAL_STATE.time} />);
   
   const h2 = timer.find('h2');
   expect(h2.text()).toEqual(INTERVAL_TYPES[1]);
   
   const p = timer.find('p');
   expect(p.text()).toEqual(INITIAL_STATE.time);
+});
+
+it('renders a Timer component with isPaused is set to true and the start() prop method is called', () => {
+  const start = jest.fn();
+  const timer = shallow(<Timer isPaused={true} start={start}/>);
 
   const startStopButton = timer.find('#start_stop');
   startStopButton.simulate('click');
   expect(start).toHaveBeenCalled();
+
 });
 
-it('renders a Timer component with isPaused is set to false and the start_stop button is clicked', () => {
+it('renders a Timer component with isPaused is set to false and the pause() prop method is called', () => {
   const pause = jest.fn();
   const timer = shallow(<Timer isPaused={false} pause={pause}/>);
 
