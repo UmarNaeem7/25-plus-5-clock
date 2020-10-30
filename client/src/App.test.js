@@ -21,6 +21,14 @@ const INITIAL_STATE =  {
 const INTERVAL_TYPES = Object.keys(INITIAL_STATE.intervals);
 const BUTTON_ID_DIRECTIONS = ['decrement', 'increment'];
 
+const audio = document.createElement('audio');
+audio.id = 'beep';
+const nonZeroTime = 500;
+audio.currentTime = nonZeroTime;
+audio.pause = jest.fn();
+audio.play = jest.fn();
+document.body.appendChild(audio);
+
 it('App deeply renders as a smoke test', () => {
   mount(<App />);
 });
@@ -217,6 +225,29 @@ it('calls App class method countDown() with pausedTime set to 23:00 advancing Ti
   expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_60000ms);
 });
 
+it('calls App class method countDown() with Timer component prop set to 00:31 after 90000ms due to session to break switch off by one expectation', () => {
+  jest.useFakeTimers();
+  const app = shallow(<App />);
+  app.setState({
+    intervals: {
+      break: 1,
+      session: 1
+    },
+    time: '01:00'
+  });
+  app.instance().countDown();
+  let timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual('01:00');
+  
+  jest.advanceTimersByTime(90000);
+  const EXPECTED_TIME_AFTER_60000ms = '00:31';
+  expect(setInterval).toHaveBeenCalledTimes(1);
+  timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_60000ms);
+
+  expect(audio.play).toHaveBeenCalled();
+});
+
 it('calls App class method pause() with clearInterval() called, pausedTime set to initial value after call, and Timer prop isPaused set to true', () => {
   jest.useFakeTimers();
   const app = shallow(<App />);
@@ -228,13 +259,6 @@ it('calls App class method pause() with clearInterval() called, pausedTime set t
 });
 
 it('calls App class method reset() with child component props set to their initial state values and audio methods pause() and reset() called', () => {
-  const audio = document.createElement('audio');
-  audio.id = 'beep';
-  const nonZeroTime = 500;
-  audio.currentTime = nonZeroTime;
-  audio.pause = jest.fn();
-  document.body.appendChild(audio);
-  
   const app = shallow(<App />);
   app.instance().reset();
   expect(audio.pause).toHaveBeenCalled();
