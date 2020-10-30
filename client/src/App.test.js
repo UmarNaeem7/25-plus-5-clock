@@ -216,3 +216,14 @@ it('calls App class method countDown() with pausedTime set to 23:00 advancing Ti
   timer = app.find('Timer');
   expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_60000ms);
 });
+
+it('calls App class method pause() with pausedTime set to initial value after call and Timer prop isPaused set to true', () => {
+  jest.useFakeTimers();
+  const app = shallow(<App />);
+  app.instance().pause();
+  const timer = app.find('Timer');
+  console.log(clearInterval);
+  expect(clearInterval).toHaveBeenCalledTimes(1);
+  expect(app.state().pausedTime).toEqual(['25', '00']);
+  expect(timer.prop('isPaused')).toEqual(true);
+});
