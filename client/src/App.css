@@ -47,3 +47,22 @@ button:active {
 footer {
     margin-top: 20px;
 }
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    h2 {
+        margin: 10px 0 auto;
+    }
+    
+    #timer-label {
+        margin: 5px 0 auto;
+    }
+    
+    #time-left {
+        margin: 0 auto;
+    }
+}
