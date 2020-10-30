@@ -122,7 +122,7 @@ class App extends React.Component {
   
   render(){
     return <div>
-      <h1>25 + 5 Clock</h1>
+      <h1>Tomato Timer</h1>
       {this.intervalTypes.map(type => <IntervalController key={type} type={type} length={this.state.intervals[type]} handleChange={this.handleChange}/>)}
       <Timer interval={this.state.isSession ? this.intervalTypes[1]: this.intervalTypes[0]} reset={this.reset} time={this.state.time} start={this.countDown} isPaused={this.state.isPaused} pause={this.pause}/>
       <Footer />
