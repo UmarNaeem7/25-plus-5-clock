@@ -199,7 +199,7 @@ it('calls App class method countDown() with initial state set advancing Timer pr
   expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_60000ms);
 });
 
-it('calls App class method countDown() with pausedTime set to 23:00 advancing Timer prop time by 60000ms to 22:01', () => {
+it('calls App class method countDown() with pausedTime set to 23:00 advancing Timer prop time by 60000ms to 22:00', () => {
   jest.useFakeTimers();
   const app = shallow(<App />);
   app.setState({
@@ -211,7 +211,7 @@ it('calls App class method countDown() with pausedTime set to 23:00 advancing Ti
   expect(timer.prop('time')).toEqual('23:00');
   
   jest.advanceTimersByTime(60000);
-  const EXPECTED_TIME_AFTER_60000ms = '22:01';
+  const EXPECTED_TIME_AFTER_60000ms = '22:00';
   expect(setInterval).toHaveBeenCalledTimes(1);
   timer = app.find('Timer');
   expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_60000ms);
@@ -225,4 +225,27 @@ it('calls App class method pause() with clearInterval() called, pausedTime set t
   expect(clearInterval).toHaveBeenCalledTimes(1);
   expect(app.state().pausedTime).toEqual(['25', '00']);
   expect(timer.prop('isPaused')).toEqual(true);
+});
+
+it('calls App class method reset() with child component props set to their initial state values and audio methods pause() and reset() called', () => {
+  const audio = document.createElement('audio');
+  audio.id = 'beep';
+  const nonZeroTime = 500;
+  audio.currentTime = nonZeroTime;
+  audio.pause = jest.fn();
+  document.body.appendChild(audio);
+  
+  const app = shallow(<App />);
+  app.instance().reset();
+  expect(audio.pause).toHaveBeenCalled();
+  expect(audio.currentTime).toEqual(0);
+
+  const intervalController = app.find('IntervalController');
+  intervalController.forEach((controller, i) => {
+    expect(controller.prop('length')).toEqual(INITIAL_STATE.intervals[INTERVAL_TYPES[i]]);
+  });
+  
+  const timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(INITIAL_STATE.time);
+  expect(timer.prop('isPaused')).toEqual(INITIAL_STATE.isPaused);
 });
