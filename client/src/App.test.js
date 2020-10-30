@@ -185,7 +185,7 @@ it('calls App class method handleChange() passing in an event with a target id o
   expect(timer.prop('time')).toEqual(EXPECTED_INCREMENTED_TIME);
 });
 
-it('calls App class method countDown() with initial state set advancing Timer prop time by one minute to 24:00', () => {
+it('calls App class method countDown() with initial state set advancing Timer prop time by 60000ms to 24:00', () => {
   jest.useFakeTimers();
   const app = shallow(<App />);
   app.instance().countDown();
@@ -193,8 +193,26 @@ it('calls App class method countDown() with initial state set advancing Timer pr
   expect(timer.prop('time')).toEqual(INITIAL_STATE.time);
 
   jest.advanceTimersByTime(60000);
-  const EXPECTED_TIME_AFTER_ONE_MINUTE = '24:00';
+  const EXPECTED_TIME_AFTER_60000ms = '24:00';
   expect(setInterval).toHaveBeenCalledTimes(1);
   timer = app.find('Timer');
-  expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_ONE_MINUTE);
+  expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_60000ms);
+});
+
+it('calls App class method countDown() with pausedTime set to 23:00 advancing Timer prop time by 60000ms to 22:01', () => {
+  jest.useFakeTimers();
+  const app = shallow(<App />);
+  app.setState({
+    time: '23:00',
+    pausedTime: ['23', '00']
+  });
+  app.instance().countDown();
+  let timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual('23:00');
+  
+  jest.advanceTimersByTime(60000);
+  const EXPECTED_TIME_AFTER_60000ms = '22:01';
+  expect(setInterval).toHaveBeenCalledTimes(1);
+  timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_TIME_AFTER_60000ms);
 });
