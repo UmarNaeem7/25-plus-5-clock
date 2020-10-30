@@ -241,6 +241,23 @@ it('calls App class method handleChange() passing in an event with a target id o
   expect(timer.prop('time')).toEqual(EXPECTED_TIME);
 });
 
+it('calls App class method handleChange() passing in an event with a target id of break-decrement and initial state values set ensuring Timer time prop does not change', () => {
+  const app = shallow(<App />);
+  const EXPECTED_DECREMENTED_TIME = '25:00';
+  const event = {
+    target: {
+      id: `${INTERVAL_TYPES[0]}-${BUTTON_ID_DIRECTIONS[0]}`
+    }
+  }
+  app.instance().handleChange(event);
+
+  const breakIntervalController = app.find('IntervalController').at(0);
+  expect(breakIntervalController.prop('length')).toEqual(INITIAL_STATE.intervals.break - 1);
+
+  const timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_DECREMENTED_TIME);
+});
+
 it('calls App class method countDown() with initial state set advancing Timer prop time by 60000ms to 24:00', () => {
   jest.useFakeTimers();
   const app = shallow(<App />);
