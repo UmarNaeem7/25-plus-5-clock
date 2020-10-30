@@ -193,6 +193,54 @@ it('calls App class method handleChange() passing in an event with a target id o
   expect(timer.prop('time')).toEqual(EXPECTED_INCREMENTED_TIME);
 });
 
+it('calls App class method handleChange() passing in an event with a target id of session-decrement on a session value set to 1 which will not change the value', () => {
+  const app = shallow(<App />);
+  const EXPECTED_LENGTH = 1;
+  const EXPECTED_TIME = '01:00';
+  app.setState({
+    intervals: {
+      session: 1
+    },
+    time: '01:00'
+  });
+  const event = {
+    target: {
+      id: `${INTERVAL_TYPES[1]}-${BUTTON_ID_DIRECTIONS[0]}`
+    }
+  }
+  app.instance().handleChange(event);
+
+  const sessionIntervalController = app.find('IntervalController').at(1);
+  expect(sessionIntervalController.prop('length')).toEqual(EXPECTED_LENGTH);
+
+  const timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_TIME);
+});
+
+it('calls App class method handleChange() passing in an event with a target id of session-increment on a session value set to 60 which will not change the value', () => {
+  const app = shallow(<App />);
+  const EXPECTED_LENGTH = 60;
+  const EXPECTED_TIME = '60:00';
+  app.setState({
+    intervals: {
+      session: 60
+    },
+    time: '60:00'
+  });
+  const event = {
+    target: {
+      id: `${INTERVAL_TYPES[1]}-${BUTTON_ID_DIRECTIONS[1]}`
+    }
+  }
+  app.instance().handleChange(event);
+
+  const sessionIntervalController = app.find('IntervalController').at(1);
+  expect(sessionIntervalController.prop('length')).toEqual(EXPECTED_LENGTH);
+
+  const timer = app.find('Timer');
+  expect(timer.prop('time')).toEqual(EXPECTED_TIME);
+});
+
 it('calls App class method countDown() with initial state set advancing Timer prop time by 60000ms to 24:00', () => {
   jest.useFakeTimers();
   const app = shallow(<App />);
